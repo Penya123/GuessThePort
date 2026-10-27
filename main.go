@@ -28,6 +28,27 @@ func main() {
 	}
 
 	welcome()
+
+	for {
+		if !easyPortsLevel(easyPorts, lifes, reader) {
+			if gameOver(reader) {
+				return
+			}
+		} else {
+
+		}
+	}
+
+}
+
+func welcome() {
+	cleanScrean() // Función para limpiar pantalla
+	fmt.Printf("Welcome to Guess The Port!!!\nA game to learn the defualt port by its service!\n")
+	fmt.Printf("Press any key to continue\n")
+	getch()
+}
+
+func easyPortsLevel(easyPorts map[string]int, lifes int, reader *bufio.Reader) bool {
 	cleanScrean()
 	fmt.Println("Every one should know these ports")
 	for service, port := range easyPorts {
@@ -46,20 +67,22 @@ func main() {
 			fmt.Printf("Wrong port It was %d, press a key", port)
 		}
 		if lifes <= 0 {
-			// game over or something
+			return false
 		}
 		getch()
 		cleanScrean()
-
 	}
-
+	return true
 }
 
-func welcome() {
-	cleanScrean() // Función para limpiar pantalla
-	fmt.Printf("Welcome to Guess The Port!!!\nA game to learn the defualt port by its service!\n")
-	fmt.Printf("Press any key to continue\n")
-	getch()
+func gameOver(reader *bufio.Reader) bool {
+	fmt.Println("Wanna play again from the start? [y/n]")
+	input, _ := reader.ReadString('\n')
+	answer := strings.TrimSpace(input)
+	if answer == "n" {
+		return true
+	}
+	return false
 }
 
 func getch() {
