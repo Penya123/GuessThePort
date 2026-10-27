@@ -5,12 +5,30 @@ import (
 	"os"
 	"os/exec"
 	"runtime"
+
+	"github.com/eiannone/keyboard"
 )
 
 func main() {
+	welcome()
+
+}
+
+func welcome() {
 	cleanScrean() // Función para limpiar pantalla
 	fmt.Printf("Welcome to Guess The Port!!!\nA game to learn the defualt port by its service!\n")
 	fmt.Printf("Press any key to continue\n")
+
+	err := keyboard.Open()
+	if err != nil {
+		panic(err)
+	}
+	defer keyboard.Close()
+
+	_, _, err = keyboard.GetKey()
+	if err != nil {
+		panic(err)
+	}
 }
 
 func cleanScrean() {
