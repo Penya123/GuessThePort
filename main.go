@@ -18,67 +18,47 @@ func main() {
 
 	lifes := 5
 
-	easyPorts := map[string]int{
-		"HTTP":   80,
-		"HTTPS":  443,
-		"SSH":    22,
-		"FTP":    21,
-		"Telnet": 23,
-		"DNS":    53,
-	}
-
-	basicPorts := map[string]int{
-		"SMTP":     25,
-		"POP3":     110,
-		"IMAP":     143,
-		"DHCP":     67,
-		"TFTP":     69,
-		"NTP":      123,
-		"SNMP":     161,
-		"HTTP-Alt": 8080,
-	}
-
-	mediumPorts := map[string]int{
-		"MySQL":           3306,
-		"PostgreSQL":      5432,
-		"RDP":             3389,
-		"SMB":             445,
-		"LDAP":            389,
-		"VNC":             5900,
-		"SMTPS":           465,
-		"SMTP Submission": 587,
-		"IMAPS":           993,
-		"POP3S":           995,
+	levels := []map[string]int{
+		{
+			"HTTP":   80,
+			"HTTPS":  443,
+			"SSH":    22,
+			"FTP":    21,
+			"Telnet": 23,
+			"DNS":    53,
+		}, {
+			"SMTP":     25,
+			"POP3":     110,
+			"IMAP":     143,
+			"DHCP":     67,
+			"TFTP":     69,
+			"NTP":      123,
+			"SNMP":     161,
+			"HTTP-Alt": 8080,
+		}, {
+			"MySQL":           3306,
+			"PostgreSQL":      5432,
+			"RDP":             3389,
+			"SMB":             445,
+			"LDAP":            389,
+			"VNC":             5900,
+			"SMTPS":           465,
+			"SMTP Submission": 587,
+			"IMAPS":           993,
+			"POP3S":           995,
+		},
 	}
 
 	welcome()
 
-	for {
-		// Level 1
-		fmt.Println("Everyone should know these ports")
-		if !Game(easyPorts, &lifes, reader) {
-			if gameOver(reader) {
+	for i := 0; i < len(levels); i++ {
+		fmt.Println(i)
+		if !Game(levels[i], &lifes, reader) {
+			if gameOver(reader, &lifes, &i) {
 				return
 			}
 		}
-		// Level 2
-		fmt.Println("Typical ports for networking and mail")
-		if !Game(basicPorts, &lifes, reader) {
-			if gameOver(reader) {
-				return
-			}
-		}
-		// Level 3
-		fmt.Println("Databases, remote access and secure mail")
-		if !Game(mediumPorts, &lifes, reader) {
-			if gameOver(reader) {
-				return
-			}
-		}
-		// Level 4
-
 	}
-
 }
 
 func welcome() {
@@ -115,11 +95,13 @@ func Game(Ports map[string]int, lifes *int, reader *bufio.Reader) bool {
 	return true
 }
 
-func gameOver(reader *bufio.Reader) bool {
+func gameOver(reader *bufio.Reader, lifes *int, i *int) bool {
 	fmt.Println("Wanna play again from the start? [y/n]")
 	input, _ := reader.ReadString('\n')
 	answer := strings.TrimSpace(input)
 	if answer == "y" {
+		*lifes = 5
+		*i = 0
 		return false
 	}
 	return true
