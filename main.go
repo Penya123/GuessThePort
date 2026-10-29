@@ -134,7 +134,7 @@ func Game(Ports map[string]int, lifes *int, reader *bufio.Reader) bool {
 func gameOver(reader *bufio.Reader, lifes *int, i *int) bool {
 	fmt.Println("Wanna play again from the start? [y/n]")
 	input, _ := reader.ReadString('\n')
-	answer := strings.TrimSpace(input)
+	answer := strings.ToLower(strings.TrimSpace(input))
 	if answer == "y" {
 		*lifes = 5
 		*i = 0
